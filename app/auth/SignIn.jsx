@@ -1,65 +1,128 @@
-import { Link } from "expo-router";
-import { useState } from "react";
+import { useConvex } from "convex/react";
+import { Link, useRouter } from "expo-router";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { useContext, useState } from "react";
 import { Alert, Image, Text, View } from "react-native";
-import Button from "../../components/shred/Button";
-import Input from "../../components/shred/Input";
+import Button from "../../components/shared/Button";
+import Input from "../../components/shared/Input";
+import { UserContext } from "../../context/UserContext";
+import { api } from "../../convex/_generated/api";
+import { auth } from "../../service/firebaseConfig";
 
-const Signin = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+export default function SignIn() {
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  const convex = useConvex();
+  const { user, setUser } = useContext(UserContext);
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const onSignIn = () => {
-    // Handle sign in logic here
-    console.log("Sign In Pressed", { email, password });
     if (!email || !password) {
-      Alert.alert("Error", "Please fill in all fields");
+      Alert.alert("Missing Fields!", "Enter All field Value");
       return;
     }
+
+    setLoading(true);
+    signInWithEmailAndPassword(auth, email, password)
+      .then(async (userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        const userData = await convex.query(api.Users.GetUser, {
+          email: email.toLowerCase(),
+        });
+
+        console.log(userData);
+        setUser(userData);
+        router.push("/(tabs)/Home");
+        setLoading(false);
+        // ...
+      })
+      .catch((error) => {
+        setLoading(false);
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log(errorMessage);
+        Alert.alert(
+          "Incorrect Email & Password",
+          "Please enter valid email and password"
+        );
+      });
   };
+
   return (
     <View
       style={{
         display: "flex",
         alignItems: "center",
-        justifyContent: "center",
         padding: 20,
       }}
     >
       <Image
-        source={require("../../assets/images/logo.png")}
-        style={{ width: 150, height: 150, marginTop: 50 }}
+        source={require("./../../assets/images/logo.png")}
+        style={{
+          width: 150,
+          height: 150,
+          marginTop: 60,
+        }}
       />
-      <Text style={{ fontSize: 24, fontWeight: "bold", marginVertical: 20 }}>
-        Welcome Back!
-      </Text>
-      <View style={{ width: "100%" }}>
-        <Input placeholder="Email" onChangeText={setEmail} />
-        <Input placeholder="Password" password onChangeText={setPassword} />
-        <View style={{ marginTop: 20, width: "100%", fontSize: 16 }}>
-          <Button title="Sign In" onPress={() => onSignIn()} />
 
-          <View
+      <Text
+        style={{
+          fontSize: 35,
+          fontWeight: "bold",
+        }}
+      >
+        Welcome Back
+      </Text>
+
+      <View
+        style={{
+          marginTop: 20,
+          width: "100%",
+        }}
+      >
+        <Input placeholder={"Email"} onChangeText={setEmail} />
+        <Input
+          placeholder={"Password"}
+          password={true}
+          onChangeText={setPassword}
+        />
+      </View>
+      <View
+        style={{
+          marginTop: 15,
+          width: "100%",
+        }}
+      >
+        <Button
+          title={"Sign In"}
+          onPress={() => onSignIn()}
+          loading={loading}
+        />
+
+        <Text
+          style={{
+            textAlign: "center",
+            fontSize: 16,
+            marginTop: 15,
+          }}
+        >
+          Don't have an account?{" "}
+        </Text>
+        <Link href={"/auth/SignUp"}>
+          <Text
             style={{
-              width: "100%",
               textAlign: "center",
               fontSize: 16,
-              color: "#555",
-              alignItems: "center",
-              justifyContent: "center",
-              marginVertical: 20,
+              marginTop: 5,
+              fontWeight: "bold",
             }}
           >
-            <Text style={{ marginTop: 10 }}>Don't have an account? </Text>
-            <Link href={"/auth/SignUp"}>
-              <Text style={{ marginTop: 30, fontSize: 18, fontWeight: "bold" }}>
-                Create a New Account
-              </Text>
-            </Link>
-          </View>
-        </View>
+            Create New Account
+          </Text>
+        </Link>
       </View>
     </View>
   );
-};
-
-export default Signin;
+}
