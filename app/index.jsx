@@ -1,9 +1,11 @@
 import { Image } from "expo-image";
+import { useRouter } from "expo-router";
 import { Dimensions, Text, View } from "react-native";
+import Button from "../components/shred/Button";
 import colors from "../shared/color";
-import Button from "./../components/shred/Button";
 
 export default function Index() {
+  const router = useRouter();
   return (
     <View
       style={{
@@ -67,7 +69,8 @@ export default function Index() {
         >
           <Button
             title={"Get Started"}
-            onPress={() => console.log("## get started button pressed")}
+            onPress={() => router.push("/auth/SignIn")}
+            icon={"arrow-right"}
           />
         </View>
       </View>
