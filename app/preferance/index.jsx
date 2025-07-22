@@ -10,11 +10,13 @@ import { useMutation } from "convex/react";
 import { useRouter } from "expo-router";
 import { useContext, useState } from "react";
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import Colors from "../../shared/color";
+import { CalculateCaloriesAI } from "../../services/AiModel";
+import Prompt from "../../shared/Prompt";
 import Button from "./../../components/shared/Button";
 import Input from "./../../components/shared/Input";
 import { UserContext } from "./../../context/UserContext";
 import { api } from "./../../convex/_generated/api";
+import Colors from "./../../shared/Colors";
 export default function Preferance() {
   const [weight, setWeight] = useState();
   const [height, setHeight] = useState();
@@ -23,7 +25,7 @@ export default function Preferance() {
   const { user, setUser } = useContext(UserContext);
   const router = useRouter();
   const UpdateUserPref = useMutation(api.Users.UpdateUserPref);
-  console.log(user);
+  console.log({ user });
   const OnContinue = async () => {
     if (!weight || !height || !gender) {
       Alert.alert("Fill All details", "Enter all details to continue");
@@ -37,10 +39,21 @@ export default function Preferance() {
       gender: gender,
       goal: goal,
     };
+    //Calculate Calories using AI
+    const PROMPT = JSON.stringify(data) + Prompt.CALORIES_PROMPT;
+    console.log({ PROMPT });
+    const AIResult = await CalculateCaloriesAI(PROMPT);
+    console.log({ AIResult }, AIResult.choices[0].message.content);
+    const AIResp = AIResult.choices[0].message.content;
+    const JSONContent = JSON.parse(
+      AIResp.replace("```json", "").replace("```", "")
+    );
 
+    console.log({ JSONContent });
     // console.log(data)
     const result = await UpdateUserPref({
       ...data,
+      ...JSONContent,
     });
 
     setUser((prev) => ({

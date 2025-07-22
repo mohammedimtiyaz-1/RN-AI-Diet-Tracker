@@ -7,8 +7,7 @@ import Button from "../../components/shared/Button";
 import Input from "../../components/shared/Input";
 import { UserContext } from "../../context/UserContext";
 import { api } from "../../convex/_generated/api";
-import { auth } from "../../service/firebaseConfig";
-
+import { auth } from "../../services/FirebaseConfig";
 export default function SignIn() {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
@@ -32,7 +31,7 @@ export default function SignIn() {
           email: email.toLowerCase(),
         });
 
-        console.log(userData);
+        console.log({ userData });
         setUser(userData);
         router.push("/(tabs)/Home");
         setLoading(false);
@@ -42,7 +41,7 @@ export default function SignIn() {
         setLoading(false);
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(errorMessage);
+        console.log({ errorMessage });
         Alert.alert(
           "Incorrect Email & Password",
           "Please enter valid email and password"

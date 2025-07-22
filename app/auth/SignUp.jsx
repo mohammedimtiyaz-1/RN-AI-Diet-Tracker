@@ -1,5 +1,5 @@
 import { useMutation } from "convex/react";
-import { Link } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { useContext, useState } from "react";
 import { Alert, Image, Text, View } from "react-native";
@@ -7,46 +7,47 @@ import Button from "../../components/shared/Button";
 import Input from "../../components/shared/Input";
 import { UserContext } from "../../context/UserContext";
 import { api } from "../../convex/_generated/api";
-import { auth } from "../../service/firebaseConfig";
+import { auth } from "../../services/FirebaseConfig";
 
-const SignUp = () => {
-  // State to manage form inputs
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const { user, setUser } = useContext(UserContext);
-
+export default function SignUp() {
+  const [name, setName] = useState();
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
   const createNewUser = useMutation(api.Users.CreateNewUser);
+  const { user, setUser } = useContext(UserContext);
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
   const onSignUp = () => {
-    // Handle sign up logic here
-    console.log("Sign Up Pressed", { fullName, email, password });
-    if (!fullName || !email || !password) {
-      Alert.alert("Error", "Please fill in all fields");
+    if (!name || !email || !password) {
+      Alert.alert("Missing Fields!", "Enter All field Value");
       return;
     }
 
+    setLoading(true);
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         // Signed up
         const user = userCredential.user;
-        console.log("User signed up successfully:", user);
-
+        console.log({ user });
         if (user) {
           const result = await createNewUser({
-            email: user.email,
-            name: fullName,
+            name: name,
+            email: email.toLowerCase(),
           });
-          console.log(result);
+
+          console.log({ result });
           setUser(result);
+          // Navigate to Home Screen
+          router.push("/auth/SignIn");
+          setLoading(false);
         }
         // ...
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.error("Error signing up:", errorCode, errorMessage);
-        Alert.alert("Sign Up Error", errorMessage);
+        console.log(errorMessage);
+        setLoading(false);
         // ..
       });
   };
@@ -56,46 +57,75 @@ const SignUp = () => {
       style={{
         display: "flex",
         alignItems: "center",
-        justifyContent: "center",
         padding: 20,
       }}
     >
       <Image
-        source={require("../../assets/images/logo.png")}
-        style={{ width: 150, height: 150, marginTop: 50 }}
+        source={require("./../../assets/images/logo.png")}
+        style={{
+          width: 150,
+          height: 150,
+          marginTop: 60,
+        }}
       />
-      <Text style={{ fontSize: 24, fontWeight: "bold", marginVertical: 20 }}>
-        Create a New Account
-      </Text>
-      <View style={{ width: "100%" }}>
-        <Input placeholder="Full Name" onChangeText={setFullName} />
-        <Input placeholder="Email" onChangeText={setEmail} />
-        <Input placeholder="Password" password onChangeText={setPassword} />
-        <View style={{ marginTop: 20, width: "100%", fontSize: 16 }}>
-          <Button title="Create Account" onPress={() => onSignUp()} />
 
-          <View
+      <Text
+        style={{
+          fontSize: 35,
+          fontWeight: "bold",
+        }}
+      >
+        Create New Account
+      </Text>
+
+      <View
+        style={{
+          marginTop: 20,
+          width: "100%",
+        }}
+      >
+        <Input placeholder={"Full Name"} onChangeText={setName} />
+        <Input placeholder={"Email"} onChangeText={setEmail} />
+        <Input
+          placeholder={"Password"}
+          password={true}
+          onChangeText={setPassword}
+        />
+      </View>
+      <View
+        style={{
+          marginTop: 15,
+          width: "100%",
+        }}
+      >
+        <Button
+          title={"Create Account"}
+          onPress={() => onSignUp()}
+          loading={loading}
+        />
+
+        <Text
+          style={{
+            textAlign: "center",
+            fontSize: 16,
+            marginTop: 15,
+          }}
+        >
+          Already have an account?{" "}
+        </Text>
+        <Link href={"/auth/SignIn"}>
+          <Text
             style={{
-              width: "100%",
               textAlign: "center",
               fontSize: 16,
-              color: "#555",
-              alignItems: "center",
-              justifyContent: "center",
-              marginVertical: 10,
+              marginTop: 5,
+              fontWeight: "bold",
             }}
           >
-            <Text style={{ marginTop: 10 }}>Already have an account ? </Text>
-            <Link href={"/auth/SignIn"}>
-              <Text style={{ marginTop: 30, fontSize: 18, fontWeight: "bold" }}>
-                Sign In
-              </Text>
-            </Link>
-          </View>
-        </View>
+            Sign In Here
+          </Text>
+        </Link>
       </View>
     </View>
   );
-};
-
-export default SignUp;
+}

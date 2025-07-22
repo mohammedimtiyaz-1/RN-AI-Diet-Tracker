@@ -1,45 +1,46 @@
 import { UserContext } from "@/context/UserContext";
 import { api } from "@/convex/_generated/api";
 import { useConvex } from "convex/react";
-import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { onAuthStateChanged } from "firebase/auth";
+import { ArrowRight } from "lucide-react-native";
 import { useContext, useEffect } from "react";
-import { Dimensions, Text, View } from "react-native";
+import { Dimensions, Image, Text, View } from "react-native";
 import Button from "../components/shared/Button";
-import { auth } from "../service/firebaseConfig";
-import colors from "../shared/color";
+import Colors from "../shared/Colors";
+import { auth } from "./../services/FirebaseConfig";
 
 export default function Index() {
   const router = useRouter();
-  const convex = useConvex;
   const { user, setUser } = useContext(UserContext);
+  const convex = useConvex();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (userInfo) => {
-      console.log(userInfo?.email);
+      console.log("email in  index", userInfo?.email);
       const userData = await convex.query(api.Users.GetUser, {
         email: userInfo?.email,
       });
       console.log("USER", userData);
+      setUser(userData);
       if (!userData) {
         router.push("/auth/SignIn");
         return;
       }
-      setUser(userData);
+      // setUser(userData);
       router.replace("/(tabs)/Home");
     });
     return () => unsubscribe();
   }, []);
+
   return (
     <View
       style={{
         flex: 1,
-        alignItems: "center",
       }}
     >
       <Image
-        source={require("../assets/images/landing.jpg")}
+        source={require("./../assets/images/landing.jpg")}
         style={{
           width: "100%",
           height: Dimensions.get("screen").height,
@@ -51,53 +52,57 @@ export default function Index() {
           height: Dimensions.get("screen").height,
           backgroundColor: "#0707075e",
           width: "100%",
+          display: "flex",
           alignItems: "center",
-          justifyContent: "center",
-          paddingHorizontal: 20,
+          padding: 20,
         }}
       >
         <Image
           source={require("./../assets/images/logo.png")}
-          style={{ width: 100, height: 100 }}
+          style={{
+            width: 150,
+            height: 150,
+            marginTop: 100,
+          }}
         />
+
         <Text
           style={{
-            color: colors.WHITE,
+            fontSize: 30,
             fontWeight: "bold",
-            fontSize: 24,
-            marginTop: 10,
+            color: Colors.WHITE,
           }}
         >
-          AI Diet Tracker
+          AI Diet Planner
         </Text>
         <Text
           style={{
             textAlign: "center",
-            color: colors.WHITE,
-            marginTop: 10,
             marginHorizontal: 20,
             fontSize: 20,
+            color: Colors.WHITE,
+            marginTop: 15,
             opacity: 0.8,
-            fontWeight: "500",
           }}
         >
           Craft delicious , Healthy ,mean plans tailored just for you.Achieve
           your goal with ease!
         </Text>
-        <View
-          style={{
-            position: "absolute",
-            bottom: 50,
-            alignItems: "center",
-            width: "100%",
-          }}
-        >
-          <Button
-            title={"Get Started"}
-            onPress={() => router.push("/auth/SignIn")}
-            icon={"arrow-right"}
-          />
-        </View>
+      </View>
+
+      <View
+        style={{
+          position: "absolute",
+          width: "100%",
+          bottom: 25,
+          padding: 20,
+        }}
+      >
+        <Button
+          title={"Get Started"}
+          onPress={() => router.push("/auth/SignIn")}
+          icon={<ArrowRight />}
+        />
       </View>
     </View>
   );

@@ -3,22 +3,22 @@ import { mutation, query } from "./_generated/server";
 
 export const CreateNewUser = mutation({
   args: {
-    email: v.string(),
+    email: v.optional(v.string()),
     name: v.string(),
   },
   handler: async (ctx, args) => {
     const user = await ctx.db
-      .query("Users")
+      .query("users")
       .filter((q) => q.eq(q.field("email"), args.email))
       .collect();
 
-    if (user?.length === 0) {
+    if (user?.length == 0) {
       const data = {
         name: args.name,
         email: args.email,
         credits: 10,
       };
-      const result = await ctx.db.insert("Users", {
+      const result = await ctx.db.insert("users", {
         ...data,
       });
 
@@ -34,7 +34,7 @@ export const GetUser = query({
   },
   handler: async (ctx, args) => {
     const user = await ctx.db
-      .query("Users")
+      .query("users")
       .filter((q) => q.eq(q.field("email"), args.email))
       .collect();
 
@@ -44,7 +44,7 @@ export const GetUser = query({
 
 export const UpdateUserPref = mutation({
   args: {
-    uid: v.id("Users"),
+    uid: v.id("users"),
     height: v.string(),
     weight: v.string(),
     gender: v.string(),

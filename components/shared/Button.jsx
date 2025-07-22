@@ -1,21 +1,25 @@
-import { Text, TouchableOpacity } from 'react-native'
-import colors from "../../shared/color"
+import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native'
+import React from 'react'
+import Colors from '@/shared/Colors'
 
-const Button = ({title="Button",onPress}) => {
-  return (
-    <TouchableOpacity onPress={onPress} 
-    style={{
-      backgroundColor: colors.PRIMARY ,
-      padding: 10,
-      borderRadius: 5,
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: "100%",
-      marginVertical:10,
-      height: 60,}}>
-      <Text style={{fontSize:20,color:colors.WHITE,textAlign:'center'}}>{title}</Text>
-    </TouchableOpacity>
-  )
+export default function Button({ title, onPress, icon, loading = false }) {
+    return (
+        <TouchableOpacity
+            onPress={onPress}
+            disabled={loading}
+            style={{
+                padding: 13,
+                backgroundColor: Colors.PRIMARY,
+                width: '100%',
+                borderRadius: 10
+            }}>
+            {loading ? <ActivityIndicator color={Colors.WHITE} /> :
+
+                <Text style={{
+                    fontSize: 18,
+                    color: Colors.WHITE,
+                    textAlign: 'center'
+                }}> {icon} {title} </Text>}
+        </TouchableOpacity>
+    )
 }
-
-export default Button
