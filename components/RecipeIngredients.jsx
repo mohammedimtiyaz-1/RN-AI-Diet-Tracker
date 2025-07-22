@@ -1,15 +1,44 @@
 import { FlatList, Text, View } from "react-native";
 import Colors from "../shared/Colors";
+import STRINGS from '../constants/strings';
+
+import React, { Component } from 'react';
+
+// Simple Error Boundary (replace with shared if available)
+class ErrorBoundary extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+  componentDidCatch(error, errorInfo) {
+    // Log error if needed
+  }
+  render() {
+    if (this.state.hasError) {
+      return <Text style={{ color: 'red', textAlign: 'center', margin: 20 }}>Something went wrong.</Text>;
+    }
+    return this.props.children;
+  }
+}
 
 export default function RecipeIngredients({ recipeDetail }) {
-  const ingrdients = recipeDetail?.jsonData?.ingredients;
-  console.log({ ingrdients });
+  let ingrdients = [];
+  try {
+    ingrdients = recipeDetail?.jsonData?.ingredients || [];
+  } catch (_e) {
+    // Optionally handle error
+    ingrdients = [];
+  }
   return (
-    <View
-      style={{
-        marginTop: 15,
-      }}
-    >
+    <ErrorBoundary>
+      <View
+        style={{
+          marginTop: 15,
+        }}
+      >
       <View
         style={{
           display: "flex",
@@ -23,7 +52,7 @@ export default function RecipeIngredients({ recipeDetail }) {
             fontWeight: "bold",
           }}
         >
-          Ingredinets{" "}
+          {STRINGS.INGREDIENTS_TITLE}
         </Text>
         <Text
           style={{
@@ -86,5 +115,6 @@ export default function RecipeIngredients({ recipeDetail }) {
         )}
       />
     </View>
+    </ErrorBoundary>
   );
 }

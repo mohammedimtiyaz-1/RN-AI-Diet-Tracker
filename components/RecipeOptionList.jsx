@@ -1,6 +1,6 @@
 import { useMutation } from "convex/react";
 import { useRouter } from "expo-router";
-import { useContext, useState } from "react";
+import React, { useContext, useState, useCallback } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { GenerateAIRecipe, GenerateRecipeImage } from "../services/AiModel";
 import Colors from "../shared/Colors";
@@ -8,12 +8,35 @@ import Prompt from "../shared/Prompt";
 import { UserContext } from "./../context/UserContext";
 import { api } from "./../convex/_generated/api";
 import LoadingDialog from "./LoadingDialog";
+import STRINGS from '../constants/strings';
+
+// Simple Error Boundary (replace with shared if available)
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+  componentDidCatch(error, errorInfo) {
+    // Optionally log error
+  }
+  render() {
+    if (this.state.hasError) {
+      return <Text style={{ color: 'red', textAlign: 'center', margin: 20 }}>Something went wrong.</Text>;
+    }
+    return this.props.children;
+  }
+}
+
 export default function RecipeOptionList({ recipeOption }) {
   const [loading, setLoading] = useState(false);
   const CreateRecipe = useMutation(api.Recipes.CreateRecipe);
   const { user } = useContext(UserContext);
   const router = useRouter();
-  const onRecipeOptionSelect = async (recipe) => {
+
+  const onRecipeOptionSelect = useCallback(async (recipe) => {
     setLoading(true);
     const PROMPT =
       "RecipeName: " +
@@ -28,12 +51,10 @@ export default function RecipeOptionList({ recipeOption }) {
         .replace("```json", "")
         .replace("```", "");
       const parsedJSONResp = JSON.parse(extractJson);
-      console.log(parsedJSONResp);
       //Generate RecipeImage
       const aiImageResp = await GenerateRecipeImage(
         parsedJSONResp?.imagePrompt
       );
-      console.log(aiImageResp?.data?.image);
       // Save to Database
       const saveRecipeResult = await CreateRecipe({
         jsonData: parsedJSONResp,
@@ -41,9 +62,6 @@ export default function RecipeOptionList({ recipeOption }) {
         recipeName: parsedJSONResp?.recipeName,
         uid: user?._id,
       });
-      console.log({ saveRecipeResult });
-      // Redirect to Recipe Details Screen
-
       setLoading(false);
       router.push({
         pathname: "/recipe-detail",
@@ -51,25 +69,28 @@ export default function RecipeOptionList({ recipeOption }) {
           recipeId: saveRecipeResult,
         },
       });
-    } catch (e) {
+    } catch (_e) {
       setLoading(false);
-      console.log({ e });
+      // Optionally handle error
     }
-  };
+  }, [CreateRecipe, router, user]);
 
   return (
-    <View
-      style={{
-        marginTop: 20,
-      }}
-    >
+    <ErrorBoundary>
+      <>
+        <LoadingDialog loading={loading} />
+        <View
+          style={{
+            marginTop: 20,
+        }}
+      >
       <Text
         style={{
           fontSize: 20,
           fontWeight: "bold",
         }}
       >
-        Select Recipe
+        {STRINGS.OPTIONS_TITLE}
       </Text>
 
       <View>
@@ -102,7 +123,8 @@ export default function RecipeOptionList({ recipeOption }) {
           </TouchableOpacity>
         ))}
       </View>
-      <LoadingDialog loading={loading} />
-    </View>
+      </View>
+      </>
+    </ErrorBoundary>
   );
 }

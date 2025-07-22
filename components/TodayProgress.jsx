@@ -5,6 +5,7 @@ import { Text, View } from "react-native";
 import { UserContext } from "../context/UserContext";
 import Colors from "../shared/Colors";
 import { api } from "./../convex/_generated/api";
+import STRINGS from '../constants/strings';
 
 export default function TodayProgress() {
   const { user } = useContext(UserContext);
@@ -49,7 +50,7 @@ export default function TodayProgress() {
             fontWeight: "bold",
           }}
         >
-          Today's Goal
+          {STRINGS.TODAY_GOAL}
         </Text>
         <Text
           style={{
@@ -78,7 +79,7 @@ export default function TodayProgress() {
           fontSize: 16,
         }}
       >
-        You'r doing great!
+        {STRINGS.DOING_GREAT}
       </Text>
 
       <View
@@ -107,8 +108,8 @@ export default function TodayProgress() {
           marginTop: 5,
         }}
       >
-        <Text>Calories Consumes</Text>
-        <Text>Keep it up! 🔥</Text>
+        <Text>{STRINGS.CALORIES_CONSUMED}</Text>
+        <Text>{STRINGS.KEEP_IT_UP}</Text>
       </View>
     </View>
   );

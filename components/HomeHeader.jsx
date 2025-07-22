@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { Image, Text, View } from "react-native";
 import { UserContext } from "../context/UserContext";
+import STRINGS from '../constants/strings';
 
 export default function HomeHeader() {
   const { user } = useContext(UserContext);
@@ -28,7 +29,7 @@ export default function HomeHeader() {
             fontSize: 18,
           }}
         >
-          Hello, 👋
+          {STRINGS.HOME_GREETING}
         </Text>
         <Text
           style={{

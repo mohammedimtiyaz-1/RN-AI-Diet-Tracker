@@ -3,10 +3,10 @@ import { api } from "@/convex/_generated/api";
 import { useConvex } from "convex/react";
 import { useRouter } from "expo-router";
 import { onAuthStateChanged } from "firebase/auth";
-import { ArrowRight } from "lucide-react-native";
 import { useContext, useEffect } from "react";
 import { Dimensions, Image, Text, View } from "react-native";
 import Button from "../components/shared/Button";
+import STRINGS from "../constants/strings";
 import Colors from "../shared/Colors";
 import { auth } from "./../services/FirebaseConfig";
 
@@ -74,7 +74,7 @@ export default function Index() {
             color: Colors.WHITE,
           }}
         >
-          AI Diet Planner
+          {STRINGS.APP_TITLE}
         </Text>
         <Text
           style={{
@@ -86,8 +86,7 @@ export default function Index() {
             opacity: 0.8,
           }}
         >
-          Craft delicious , Healthy ,mean plans tailored just for you.Achieve
-          your goal with ease!
+          {STRINGS.WELCOME_SUBTITLE}
         </Text>
       </View>
 
@@ -100,9 +99,8 @@ export default function Index() {
         }}
       >
         <Button
-          title={"Get Started"}
+          title={STRINGS.BUTTON_GET_STARTED || "Get Started"}
           onPress={() => router.push("/auth/SignIn")}
-          icon={<ArrowRight />}
         />
       </View>
     </View>

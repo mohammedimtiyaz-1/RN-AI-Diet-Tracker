@@ -11,6 +11,7 @@ import MealPlanCard from "./MealPlanCard";
 import Button from "./shared/Button";
 
 import { useRouter } from "expo-router";
+import STRINGS from '../constants/strings';
 
 export default function TodaysMealPlan({ selectedDate }) {
   const [mealPlan, setMealPlan] = useState([]);
@@ -46,7 +47,7 @@ export default function TodaysMealPlan({ selectedDate }) {
             fontWeight: "bold",
           }}
         >
-          Today's Meal Plan
+          {STRINGS.TODAYS_MEAL_PLAN}
         </Text>
       )}
 
@@ -73,11 +74,11 @@ export default function TodaysMealPlan({ selectedDate }) {
               marginBottom: 20,
             }}
           >
-            You Don't have any meal plan for Today
+            {STRINGS.NO_MEAL_PLAN_TODAY || "You Don't have any meal plan for Today"}
           </Text>
 
           <Button
-            title={"Create New Meal Plan"}
+            title={STRINGS.CREATE_NEW_MEAL_PLAN || "Create New Meal Plan"}
             onPress={() => router.push("/(tabs)/Meals")}
           />
         </View>

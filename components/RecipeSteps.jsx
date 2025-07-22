@@ -1,12 +1,41 @@
 import { View, Text, FlatList } from 'react-native'
-import React from 'react'
+import React from "react";
+
 import Colors from '../shared/Colors';
+
+import LoadingDialog from './LoadingDialog';
+
+// Simple Error Boundary (replace with shared if available)
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+  static getDerivedStateFromError(error) {
+    return { hasError: true };
+  }
+  componentDidCatch(error, errorInfo) {
+    // Optionally log error
+  }
+  render() {
+    if (this.state.hasError) {
+      return <Text style={{ color: 'red', textAlign: 'center', margin: 20 }}>Something went wrong.</Text>;
+    }
+    return this.props.children;
+  }
+}
 
 export default function RecipeSteps({ recipeDetail }) {
     const steps = (recipeDetail?.jsonData)?.steps;
 
-    return (
-        <View style={{
+    const [loading, setLoading] = React.useState(false);
+
+  return (
+    <ErrorBoundary>
+      <>
+        <LoadingDialog loading={loading} />
+        <View
+          style={{
             marginTop: 15
         }}>
             <Text style={{
@@ -48,5 +77,7 @@ export default function RecipeSteps({ recipeDetail }) {
                 )}
             />
         </View>
-    )
+      </>
+    </ErrorBoundary>
+  );
 }

@@ -1,50 +1,75 @@
-# Welcome to your Expo app 👋
+# RN AI Diet Tracker
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A modern, AI-powered diet tracking app built with Expo and React Native.
 
-## Get started
+## Overview
 
-1. Install dependencies
+**RN AI Diet Tracker** helps users plan, track, and optimize their daily meals with the help of artificial intelligence. The app features a playful, modern UI with a minimal dark theme, bold colors, rounded components, and smooth animations. All user-facing text is centralized for easy localization, and robust error handling ensures a smooth user experience.
 
-   ```bash
-   npm install
-   ```
+### Key Features
+- Personalized daily meal plans
+- AI-powered recipe generation and suggestions
+- Nutritional tracking (calories, macros, servings)
+- Meal completion tracking
+- Fun, modern, and consistent UI/UX
+- Centralized user-facing strings for localization
+- Robust error boundaries and loading feedback
+- Performance optimizations (memoization, best React practices)
 
-2. Start the app
+## Tech Stack
+- **React Native** (with Expo) for cross-platform mobile development
+- **Convex** for backend data and mutations
+- **Firebase Auth** for authentication
+- **AI Services** for recipe and meal plan generation
+- **Expo Router** for navigation
+- **@hugeicons/react-native** for iconography
+- **Jest** for unit testing
 
-   ```bash
-    npx expo start
-   ```
+## Architecture
 
-In the output, you'll find options to open the app in a
+### UI Layer
+- Built with React Native functional components
+- Centralized theme (`Colors.jsx`, `Theme.jsx`) and strings (`constants/strings.js`)
+- Shared UI components (Button, Input, LoadingDialog, ErrorBoundary)
+- Consistent styling with inline styles and theme variables
+- Error boundaries and loading dialogs in all async-capable components
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+### State & Data Layer
+- Uses React hooks (`useState`, `useEffect`, `useCallback`, `useMemo`)
+- Context API for user/session state
+- Convex hooks (`useQuery`, `useMutation`) for backend interactions
+- Async/await with robust try/catch error handling
+- All async actions provide loading feedback
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### Backend & AI
+- Convex for real-time backend data and mutations
+- AI-powered endpoints for recipe and meal plan generation
+- Firebase for authentication and user management
 
-## Get a fresh project
+### Best Practices
+- No business logic in UI components; logic is separated and reusable
+- All user-facing strings are centralized
+- Strict linting and code quality enforcement
+- All console logs removed for production
+- Error boundaries and try/catch everywhere
+- Memoization and hook dependency management
+- Unit tests for key components
 
-When you're ready, run:
-
-```bash
-npm run reset-project
+## Folder Structure
+```
+components/         # Shared and screen-specific UI components
+constants/          # Centralized strings and theme colors
+context/            # React context for user/session
+services/           # AI/utility services
+shared/             # Shared UI and utility modules
+app/                # Main app screens and navigation
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Getting Started
+1. Install dependencies: `npm install`
+2. Start the Expo dev server: `npm start`
+3. Run on your device or simulator
 
-## Learn more
+---
 
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+**RN AI Diet Tracker** is designed for extensibility, maintainability, and a delightful user experience. Contributions and feedback are welcome!

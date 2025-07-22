@@ -1,6 +1,7 @@
 import { View, Text, Modal, ActivityIndicator } from 'react-native'
 import React from 'react'
 import Colors from '../shared/Colors'
+import STRINGS from '../constants/strings';
 
 export default function LoadingDialog({ loading = false }) {
     return (
@@ -24,7 +25,7 @@ export default function LoadingDialog({ loading = false }) {
                         color: Colors.WHITE,
                         fontSize: 18,
                         marginTop: 8
-                    }}>Loading...</Text>
+                    }}>{STRINGS.LOADING}</Text>
 
                 </View>
             </View>
