@@ -18,6 +18,7 @@ export default defineSchema({
   recipes: defineTable({
     jsonData: v.any(),
     uid: v.id("users"),
+    imageUrl: v.string(),
     recipeName: v.any(),
   }),
 

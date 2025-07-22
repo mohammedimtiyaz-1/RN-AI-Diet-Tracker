@@ -1,13 +1,13 @@
-import { View, Text, TouchableOpacity } from "react-native";
-import React, { useContext, useState } from "react";
+import { useMutation } from "convex/react";
+import { useRouter } from "expo-router";
+import { useContext, useState } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
+import { GenerateAIRecipe, GenerateRecipeImage } from "../services/AiModel";
 import Colors from "../shared/Colors";
 import Prompt from "../shared/Prompt";
-import { GenerateAIRecipe, GenerateRecipeImage } from "../services/AiModel";
-import LoadingDialog from "./LoadingDialog";
-import { useMutation } from "convex/react";
-import { api } from "./../convex/_generated/api";
 import { UserContext } from "./../context/UserContext";
-import { useRouter } from "expo-router";
+import { api } from "./../convex/_generated/api";
+import LoadingDialog from "./LoadingDialog";
 export default function RecipeOptionList({ recipeOption }) {
   const [loading, setLoading] = useState(false);
   const CreateRecipe = useMutation(api.Recipes.CreateRecipe);
@@ -28,19 +28,20 @@ export default function RecipeOptionList({ recipeOption }) {
         .replace("```json", "")
         .replace("```", "");
       const parsedJSONResp = JSON.parse(extractJson);
-      console.log({ PROMPT }, "--results", parsedJSONResp);
-
-      console.log("recipe list", parsedJSONResp?.imagePrompt);
-
-      console.log("user details", user);
+      console.log(parsedJSONResp);
+      //Generate RecipeImage
+      const aiImageResp = await GenerateRecipeImage(
+        parsedJSONResp?.imagePrompt
+      );
+      console.log(aiImageResp?.data?.image);
       // Save to Database
       const saveRecipeResult = await CreateRecipe({
         jsonData: parsedJSONResp,
-
+        imageUrl: aiImageResp?.data?.image,
         recipeName: parsedJSONResp?.recipeName,
         uid: user?._id,
       });
-      console.log("save rescipe reuslt", saveRecipeResult);
+      console.log({ saveRecipeResult });
       // Redirect to Recipe Details Screen
 
       setLoading(false);
@@ -51,8 +52,8 @@ export default function RecipeOptionList({ recipeOption }) {
         },
       });
     } catch (e) {
-      console.log("Error in recipe option select", e);
       setLoading(false);
+      console.log({ e });
     }
   };
 

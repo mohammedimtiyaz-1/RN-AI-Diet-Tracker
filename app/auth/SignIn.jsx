@@ -13,6 +13,7 @@ export default function SignIn() {
   const [password, setPassword] = useState();
   const convex = useConvex();
   const { user, setUser } = useContext(UserContext);
+  console.log("singin, user from context", user);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 

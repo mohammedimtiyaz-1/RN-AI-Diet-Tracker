@@ -23,6 +23,7 @@ export default function Preferance() {
   const [gender, setGender] = useState();
   const [goal, setGoal] = useState();
   const { user, setUser } = useContext(UserContext);
+  console.log("prefernce ,user from context", user);
   const router = useRouter();
   const UpdateUserPref = useMutation(api.Users.UpdateUserPref);
   console.log({ user });

@@ -1,13 +1,14 @@
-import { View, Text } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
-import moment from "moment";
-import Colors from "../shared/Colors";
-import { UserContext } from "../context/UserContext";
 import { useConvex } from "convex/react";
+import moment from "moment";
+import { useContext, useEffect, useState } from "react";
+import { Text, View } from "react-native";
+import { UserContext } from "../context/UserContext";
+import Colors from "../shared/Colors";
 import { api } from "./../convex/_generated/api";
 
 export default function TodayProgress() {
   const { user } = useContext(UserContext);
+  console.log("Today's,user from context", user);
   const convex = useConvex();
   const [totalCaloriesConsumed, setTotalCaloriesConsumed] = useState(0);
 

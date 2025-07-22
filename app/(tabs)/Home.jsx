@@ -1,14 +1,15 @@
-import { View, Text, Platform, FlatList } from "react-native";
-import React, { useContext, useEffect, useState } from "react";
-import { UserContext } from "./../../context/UserContext";
 import { useRouter } from "expo-router";
+import { useContext, useEffect, useState } from "react";
+import { FlatList, Platform, View } from "react-native";
+import GenerateRecipeCard from "../../components/GenerateRecipeCard";
 import HomeHeader from "../../components/HomeHeader";
 import TodayProgress from "../../components/TodayProgress";
-import GenerateRecipeCard from "../../components/GenerateRecipeCard";
 import TodaysMealPlan from "../../components/TodaysMealPlan";
+import { UserContext } from "./../../context/UserContext";
 
 export default function Home() {
   const { user } = useContext(UserContext);
+  console.log("Home user from context", user);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 

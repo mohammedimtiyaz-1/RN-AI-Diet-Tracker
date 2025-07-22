@@ -15,6 +15,7 @@ export default function SignUp() {
   const [password, setPassword] = useState();
   const createNewUser = useMutation(api.Users.CreateNewUser);
   const { user, setUser } = useContext(UserContext);
+  console.log("sign up,user from context", user);
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const onSignUp = () => {

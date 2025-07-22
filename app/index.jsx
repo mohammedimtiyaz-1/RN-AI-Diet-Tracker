@@ -13,6 +13,7 @@ import { auth } from "./../services/FirebaseConfig";
 export default function Index() {
   const router = useRouter();
   const { user, setUser } = useContext(UserContext);
+  console.log("index app ,user from context", user);
   const convex = useConvex();
 
   useEffect(() => {

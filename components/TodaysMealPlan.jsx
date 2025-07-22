@@ -15,6 +15,7 @@ import { useRouter } from "expo-router";
 export default function TodaysMealPlan({ selectedDate }) {
   const [mealPlan, setMealPlan] = useState([]);
   const { user } = useContext(UserContext);
+  console.log("Tpdal's meal plan,user from context", user);
   const convex = useConvex();
 
   const router = useRouter();

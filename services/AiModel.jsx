@@ -36,7 +36,7 @@ export const GenerateRecipeImage = async (prompt) => {
       {
         width: 1024,
         height: 1024,
-        input: "self-portrait of a woman, lightning in the background",
+        input: prompt,
         model: "sdxl", //'flux'
         aspectRatio: "1:1", //Applicable to Flux model only
       },
@@ -54,5 +54,3 @@ export const GenerateRecipeImage = async (prompt) => {
     return null;
   }
 };
-
-// console.log(CalculateCalories.choices[0].message)
