@@ -9,7 +9,7 @@ import { UserContext } from "./../../context/UserContext";
 
 export default function Home() {
   const { user } = useContext(UserContext);
-  console.log("Home user from context", user);
+
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 

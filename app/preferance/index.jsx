@@ -23,10 +23,10 @@ export default function Preferance() {
   const [gender, setGender] = useState();
   const [goal, setGoal] = useState();
   const { user, setUser } = useContext(UserContext);
-  console.log("prefernce ,user from context", user);
+
   const router = useRouter();
   const UpdateUserPref = useMutation(api.Users.UpdateUserPref);
-  console.log({ user });
+
   const OnContinue = async () => {
     if (!weight || !height || !gender) {
       Alert.alert("Fill All details", "Enter all details to continue");
@@ -42,16 +42,14 @@ export default function Preferance() {
     };
     //Calculate Calories using AI
     const PROMPT = JSON.stringify(data) + Prompt.CALORIES_PROMPT;
-    console.log({ PROMPT });
+
     const AIResult = await CalculateCaloriesAI(PROMPT);
-    console.log({ AIResult }, AIResult.choices[0].message.content);
+
     const AIResp = AIResult.choices[0].message.content;
     const JSONContent = JSON.parse(
       AIResp.replace("```json", "").replace("```", "")
     );
 
-    console.log({ JSONContent });
-    // console.log(data)
     const result = await UpdateUserPref({
       ...data,
       ...JSONContent,

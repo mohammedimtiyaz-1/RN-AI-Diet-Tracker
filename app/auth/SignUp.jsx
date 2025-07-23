@@ -15,7 +15,7 @@ export default function SignUp() {
   const [password, setPassword] = useState();
   const createNewUser = useMutation(api.Users.CreateNewUser);
   const { user, setUser } = useContext(UserContext);
-  console.log("sign up,user from context", user);
+
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const onSignUp = () => {
@@ -29,14 +29,13 @@ export default function SignUp() {
       .then(async (userCredential) => {
         // Signed up
         const user = userCredential.user;
-        console.log({ user });
+
         if (user) {
           const result = await createNewUser({
             name: name,
             email: email.toLowerCase(),
           });
 
-          console.log({ result });
           setUser(result);
           // Navigate to Home Screen
           router.push("/auth/SignIn");
@@ -47,7 +46,7 @@ export default function SignUp() {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(errorMessage);
+
         setLoading(false);
         // ..
       });

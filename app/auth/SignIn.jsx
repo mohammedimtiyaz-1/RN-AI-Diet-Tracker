@@ -13,7 +13,7 @@ export default function SignIn() {
   const [password, setPassword] = useState();
   const convex = useConvex();
   const { user, setUser } = useContext(UserContext);
-  console.log("singin, user from context", user);
+
   const router = useRouter();
   const [loading, setLoading] = useState(false);
 
@@ -32,7 +32,6 @@ export default function SignIn() {
           email: email.toLowerCase(),
         });
 
-        console.log({ userData });
         setUser(userData);
         router.push("/(tabs)/Home");
         setLoading(false);
@@ -42,7 +41,7 @@ export default function SignIn() {
         setLoading(false);
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log({ errorMessage });
+
         Alert.alert(
           "Incorrect Email & Password",
           "Please enter valid email and password"

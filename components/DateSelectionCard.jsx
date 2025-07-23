@@ -16,7 +16,7 @@ export default function DateSelectionCard({ setSelctedDate }) {
       const nextDate = moment().add(i, "days").format("DD/MM/YYYY");
       result.push(nextDate);
     }
-    console.log({ result });
+
     setDateList(result);
   };
   return (

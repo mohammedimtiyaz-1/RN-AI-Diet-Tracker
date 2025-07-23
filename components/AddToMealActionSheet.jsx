@@ -20,7 +20,6 @@ export default function AddToMealActionSheet({
   const [selectedDate, setSelctedDate] = useState();
   const [selectedMeal, setSelctedMeal] = useState();
   const { user } = useContext(UserContext);
-  console.log("aadtomeal action,user from context", user);
   const CreateMealPlan = useMutation(api.MealPlan.CreateMealPlan);
   const mealOptions = [
     {
@@ -49,8 +48,6 @@ export default function AddToMealActionSheet({
       recipeId: recipeDetail?._id,
       uid: user?._id,
     });
-
-    console.log("create plan", { result });
 
     Alert.alert("Added!", "Added to Meal Plan");
     hideActionSheet();

@@ -2,18 +2,13 @@ import { ConvexProvider, ConvexReactClient } from "convex/react";
 import { Stack } from "expo-router";
 import { UserContext } from "./../context/UserContext";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 export default function RootLayout() {
   const convex = new ConvexReactClient(process.env.EXPO_PUBLIC_CONVEX_URL!, {
     unsavedChangesWarning: false,
   });
 
   const [user, setUser] = useState();
-
-  console.log("__lauout rendered__", { user });
-  useEffect(() => {
-    console.log("__layout useEffect called_");
-  }, []);
 
   return (
     <ConvexProvider client={convex}>

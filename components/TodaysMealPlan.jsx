@@ -11,12 +11,12 @@ import MealPlanCard from "./MealPlanCard";
 import Button from "./shared/Button";
 
 import { useRouter } from "expo-router";
-import STRINGS from '../constants/strings';
+import STRINGS from "../constants/strings";
 
 export default function TodaysMealPlan({ selectedDate }) {
   const [mealPlan, setMealPlan] = useState([]);
   const { user } = useContext(UserContext);
-  console.log("Tpdal's meal plan,user from context", user);
+
   const convex = useConvex();
 
   const router = useRouter();
@@ -25,12 +25,11 @@ export default function TodaysMealPlan({ selectedDate }) {
   }, [user, selectedDate]);
 
   const GetTodaysMealPlan = async () => {
-    console.log("Today's plan selectedDate -", selectedDate);
     const result = await convex.query(api.MealPlan.GetTodaysMealPlan, {
       date: selectedDate ?? moment().format("DD/MM/YYYY"),
       uid: user?._id,
     });
-    console.log("Today meal -->", result);
+
     setMealPlan(result);
   };
 
@@ -74,7 +73,8 @@ export default function TodaysMealPlan({ selectedDate }) {
               marginBottom: 20,
             }}
           >
-            {STRINGS.NO_MEAL_PLAN_TODAY || "You Don't have any meal plan for Today"}
+            {STRINGS.NO_MEAL_PLAN_TODAY ||
+              "You Don't have any meal plan for Today"}
           </Text>
 
           <Button

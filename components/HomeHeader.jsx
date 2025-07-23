@@ -1,11 +1,11 @@
 import { useContext } from "react";
 import { Image, Text, View } from "react-native";
+import STRINGS from "../constants/strings";
 import { UserContext } from "../context/UserContext";
-import STRINGS from '../constants/strings';
 
 export default function HomeHeader() {
   const { user } = useContext(UserContext);
-  console.log("home header ,user from context", user);
+
   return (
     <View
       style={{

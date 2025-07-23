@@ -15,17 +15,17 @@ export default function GenerateAiRecipe() {
     try {
       const PROMPT = input + Prompt.GENERATE_RECIPE_OPTION_PROMPT;
       const result = await GenerateAIRecipe(PROMPT);
-      console.log({ PROMPT }, "--results", result.choices[0].message);
+
       const extractJson = result.choices[0].message.content
         .replace("```json", "")
         .replace("```", "");
       const parsedJSONResp = JSON.parse(extractJson);
-      console.log({ parsedJSONResp });
+
       setRecipeOption(parsedJSONResp);
       setLoading(false);
     } catch (e) {
       setLoading(false);
-      console.log(e);
+      console.error(e);
     }
   };
 

@@ -27,10 +27,7 @@ const BASE_URL = "https://aigurulab.tech";
 export const GenerateRecipeImage = async (prompt) => {
   try {
     const BASE_URL = "https://aigurulab.tech";
-    console.log(
-      "Generating image for prompt:",
-      process.env.EXPO_PUBLIC_AIRGURU_LAB_API_KEY
-    );
+
     const result = await axios.post(
       BASE_URL + "/api/generate-image",
       {
@@ -47,10 +44,10 @@ export const GenerateRecipeImage = async (prompt) => {
         },
       }
     );
-    console.log("result of image", result);
+
     return result;
   } catch (e) {
-    console.log("Error in GenerateRecipeImage", e);
+    console.error("Error in GenerateRecipeImage", e);
     return null;
   }
 };

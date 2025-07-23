@@ -49,12 +49,11 @@ const MenuOptions = [
 ];
 export default function Profile() {
   const { user, setUser } = useContext(UserContext);
-  console.log("Prfile,user from context", user);
+
   const router = useRouter();
   const OnMenuOptionClick = (menu) => {
     if (menu.path == "logout") {
       signOut(auth).then(() => {
-        console.log("SIGNOUT");
         setUser(null);
         router.replace("/");
       });

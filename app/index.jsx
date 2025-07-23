@@ -13,16 +13,14 @@ import { auth } from "./../services/FirebaseConfig";
 export default function Index() {
   const router = useRouter();
   const { user, setUser } = useContext(UserContext);
-  console.log("index app ,user from context", user);
   const convex = useConvex();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (userInfo) => {
-      console.log("email in  index", userInfo?.email);
       const userData = await convex.query(api.Users.GetUser, {
         email: userInfo?.email,
       });
-      console.log("USER", userData);
+
       setUser(userData);
       if (!userData) {
         router.push("/auth/SignIn");
